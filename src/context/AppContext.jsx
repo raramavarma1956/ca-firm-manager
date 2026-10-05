@@ -58,8 +58,8 @@ const SEED_ASSIGNMENTS = [
 
 const SEED_SETTINGS = {
   id: 1,
-  firm_name: 'Apex Chartered Accountants',
-  firm_address: '123, Financial District, Mumbai, Maharashtra - 400001',
+  firm_name: import.meta.env?.VITE_FIRM_NAME || 'Apex Chartered Accountants',
+  firm_address: import.meta.env?.VITE_FIRM_ADDRESS || '123, Financial District, Mumbai, Maharashtra - 400001',
   office_lat: 19.0760,
   office_lng: 72.8777,
   allowed_radius: 100, // meters
@@ -401,14 +401,16 @@ export const AppProvider = ({ children }) => {
   };
 
   // 2. Attendance Module
-  const checkIn = async (selfieBase64, latitude, longitude) => {
+  const checkIn = async (selfieBase64, latitude, longitude, checkInMode = 'office', clientId = null) => {
     if (!sessionUser) return;
     const todayStr = getISTDateString();
     
     // Check if geo fence is required
     const settings = await getSettings();
     let distance = 0;
-    if (settings.require_geo && settings.office_lat && settings.office_lng && latitude && longitude) {
+    const isClientMode = checkInMode === 'client';
+    
+    if (!isClientMode && settings.require_geo && settings.office_lat && settings.office_lng && latitude && longitude) {
       // Calculate distance (Haversine formula)
       const R = 6371000; // meters
       const dLat = (latitude - settings.office_lat) * Math.PI / 180;
@@ -446,7 +448,9 @@ export const AppProvider = ({ children }) => {
         selfie_url: selfieBase64 || '',
         latitude,
         longitude,
-        distance_from_office: distance,
+        distance_from_office: isClientMode ? 0 : distance,
+        check_in_mode: checkInMode,
+        client_id: clientId,
         approved_by_admin: false
       };
       records.push(newRecord);

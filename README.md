@@ -2,6 +2,11 @@
 
 A progressive, high-fidelity web application built for CA firms to manage staff attendance (with selfie/GPS checks), leave requests, weekly timesheets, Indian statutory payroll, client billings, realization ratios, and secure partner audit trails.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-github-username%2Fca-firm-manager)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/your-github-username/ca-firm-manager)
+
+> *Note: Make sure to replace `your-github-username` in the links above with your actual GitHub username once you push your repository.*
+
 ---
 
 ## 🚀 1. Demo App Installation (Local Setup)
@@ -106,9 +111,27 @@ Since the app is built as a Progressive Web App (PWA), you can install it on sma
 
 *Note: PWAs on iOS must be installed using Apple's default Safari browser.*
 
-1. Open **Safari** on your iPhone.
-2. Enter the mobile network URL of the application.
-3. Tap the **Share button** at the bottom of the screen (represented by a square icon with an arrow pointing upwards).
-4. Scroll down the share sheet options and tap **Add to Home Screen**.
-5. Check or edit the application name (e.g., "CA Practice Manager") and tap **Add** in the top right corner.
-6. The app icon is now placed on your iPhone's home screen. Open it to launch the application.
+1. Run `start-app.bat` on your computer. It automatically detects and displays your computer's local network URL (e.g., `http://192.168.1.15:5173/`).
+2. Ensure your iPhone is connected to the **same Wi-Fi network**.
+3. Open **Safari** on your iPhone and visit the mobile URL.
+4. An on-screen banner with an **"Install CA Practice on iPhone"** prompt will appear.
+5. Tap the **Share button** at the bottom of the screen (square icon with an arrow pointing upwards `⎋`).
+6. Scroll down the share sheet options and tap **Add to Home Screen** (`⊞`).
+7. Confirm the name and tap **Add** in the top right corner.
+8. The CA Practice icon will now appear on your iPhone's home screen. Open it to launch the app in full-screen standalone mode.
+
+#### 📸 Taking Selfie Check-Ins on iPhone:
+- On iPhone, tap **"Open iPhone Camera"** or **"Take Selfie with Camera"** in the check-in panel.
+- iOS Safari will natively open your iPhone's front-facing camera.
+- Snap your selfie and tap **Use Photo**. The app crops, verifies, and attaches your security portrait to today's attendance record!
+- Tap **☰ Menu** in the top left to open the slide-out navigation drawer at any time.
+
+## ✈️ 5. Offsite Client Audits & Client Premises Check-In
+
+When employees are sent off-site for audits at client offices:
+1. **Client Site Check-In Mode:** Employees toggle the check-in type to "Client Site Audit" in their check-in modal. This bypasses the office radius check and prompts them to select the audit client location.
+2. **HR Review & Approval:** Client-site check-ins are flagged as "Pending Approval" with a distinct "On-Site Audit" badge and the selected client's name on the HR Dashboard. HR/Partners can manually review coordinates and approve check-ins.
+3. **Remote Network Access:** 
+   - **Private VPN (Tailscale):** Set up Tailscale VPN on the hosting PC and mobile devices. Staff can log in using the host machine's private Tailscale IP (e.g., `http://100.12.34.56:5173`) over 4G/5G mobile internet.
+   - **Public Cloud Hosting:** Connect the app to a remote Supabase instance (using the `.env` template) and deploy the frontend publicly to Vercel/Netlify for global HTTP/HTTPS access.
+

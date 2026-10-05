@@ -23,6 +23,7 @@ export const EmployeeDashboard = () => {
 
   const [activeTab, setActiveTab] = useState('attendance');
   const [settings, setSettings] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Attendance clock state
   const [todayRecord, setTodayRecord] = useState(null);
@@ -30,6 +31,8 @@ export const EmployeeDashboard = () => {
   const [selfie, setSelfie] = useState('');
   const [coords, setCoords] = useState({ latitude: null, longitude: null, distance: 0 });
   const [attendanceHistory, setAttendanceHistory] = useState([]);
+  const [checkInMode, setCheckInMode] = useState('office'); // 'office' or 'client'
+  const [selectedClientId, setSelectedClientId] = useState('');
 
   // Attendance Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth() + 1); // 1-12
@@ -224,11 +227,17 @@ export const EmployeeDashboard = () => {
         alert('Selfie verification is required.');
         return;
       }
-      await checkIn(selfie, coords.latitude, coords.longitude);
+      if (checkInMode === 'client' && !selectedClientId) {
+        alert('Please select a client for client-site check-in.');
+        return;
+      }
+      await checkIn(selfie, coords.latitude, coords.longitude, checkInMode, selectedClientId ? parseInt(selectedClientId) : null);
       addNotification('Checked In successfully for today. Pending Admin approval.', 'success');
       setShowCheckInForm(false);
       setSelfie('');
       setSurveillanceConsent(false);
+      setCheckInMode('office');
+      setSelectedClientId('');
       loadAttendance();
     } catch (err) {
       alert(err.message || 'Check-in failed.');
@@ -367,70 +376,85 @@ export const EmployeeDashboard = () => {
 
   return (
     <div className="app-container">
+      {/* Mobile Backdrop */}
+      {mobileMenuOpen && (
+        <div className="sidebar-backdrop" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
       {/* Sidebar Navigation */}
-      <div className="app-sidebar">
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-card)' }}>
-          <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>Employee Portal</h3>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-            Logged in: <strong style={{ color: 'var(--primary)' }}>{sessionUser?.name}</strong><br />
-            Division: <span style={{ color: 'var(--secondary)', fontSize: '0.7rem' }}>{sessionUser?.division || 'Audit & Assurance Services'}</span>
-            {sessionUser?.branch_id && settings?.branches && (
-              <>
-                <br />
-                Branch: <span style={{ color: 'var(--primary)', fontSize: '0.7rem' }}>
-                  {(() => {
-                    try {
-                      const branches = JSON.parse(settings.branches);
-                      const branch = branches.find(b => b.id === sessionUser.branch_id);
-                      return branch ? branch.name : 'Unknown';
-                    } catch (e) {
-                      return 'N/A';
-                    }
-                  })()}
-                </span>
-              </>
-            )}
-          </p>
+      <div className={`app-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>Employee Portal</h3>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
+              Logged in: <strong style={{ color: 'var(--primary)' }}>{sessionUser?.name}</strong><br />
+              Division: <span style={{ color: 'var(--secondary)', fontSize: '0.7rem' }}>{sessionUser?.division || 'Audit & Assurance Services'}</span>
+              {sessionUser?.branch_id && settings?.branches && (
+                <>
+                  <br />
+                  Branch: <span style={{ color: 'var(--primary)', fontSize: '0.7rem' }}>
+                    {(() => {
+                      try {
+                        const branches = JSON.parse(settings.branches);
+                        const branch = branches.find(b => b.id === sessionUser.branch_id);
+                        return branch ? branch.name : 'Unknown';
+                      } catch (e) {
+                        return 'N/A';
+                      }
+                    })()}
+                  </span>
+                </>
+              )}
+            </p>
+          </div>
+          <button 
+            type="button" 
+            className="mobile-close-btn" 
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem', gap: '0.5rem', flex: 1 }}>
           <button 
             className={`btn ${activeTab === 'attendance' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('attendance')}
+            onClick={() => { setActiveTab('attendance'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🕒 Attendance Register
           </button>
           <button 
             className={`btn ${activeTab === 'calendar' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('calendar')}
+            onClick={() => { setActiveTab('calendar'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📅 Attendance Calendar
           </button>
           <button 
             className={`btn ${activeTab === 'timesheet' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('timesheet')}
+            onClick={() => { setActiveTab('timesheet'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📅 Weekly Timesheet
           </button>
           <button 
             className={`btn ${activeTab === 'leaves' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('leaves')}
+            onClick={() => { setActiveTab('leaves'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🌴 Leave & Holidays
           </button>
           <button 
             className={`btn ${activeTab === 'assignments' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('assignments')}
+            onClick={() => { setActiveTab('assignments'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📋 Work Assignments
           </button>
           <button 
             className={`btn ${activeTab === 'payslips' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('payslips')}
+            onClick={() => { setActiveTab('payslips'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             💵 Monthly Payslips
@@ -446,9 +470,19 @@ export const EmployeeDashboard = () => {
       {/* Main Panel */}
       <div className="app-main">
         <header className="app-header">
-          <h2 style={{ fontSize: '1.25rem' }}>CA Practice Suite</h2>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            System Time (IST): <strong>{getISTDateString()} {getISTTimeString().substring(0, 5)}</strong>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <button 
+              type="button" 
+              className="mobile-menu-btn" 
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              ☰ Menu
+            </button>
+            <h2 style={{ fontSize: '1.15rem' }}>CA Practice Suite</h2>
+          </div>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+            <strong>{getISTDateString()}</strong> <span className="hide-on-mobile">{getISTTimeString().substring(0, 5)}</span>
           </span>
         </header>
 
@@ -500,6 +534,74 @@ export const EmployeeDashboard = () => {
                   </div>
                 ) : showCheckInForm ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div className="form-group">
+                      <label className="form-label">Check-In Mode</label>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button
+                          type="button"
+                          className="btn"
+                          style={{
+                            flex: 1,
+                            backgroundColor: checkInMode === 'office' ? 'var(--primary)' : 'transparent',
+                            borderColor: checkInMode === 'office' ? 'var(--primary)' : 'var(--border-card)',
+                            color: checkInMode === 'office' ? '#fff' : 'var(--text-secondary)'
+                          }}
+                          onClick={() => {
+                            setCheckInMode('office');
+                            setSelectedClientId('');
+                          }}
+                        >
+                          Office Check-In
+                        </button>
+                        <button
+                          type="button"
+                          className="btn"
+                          style={{
+                            flex: 1,
+                            backgroundColor: checkInMode === 'client' ? 'var(--primary)' : 'transparent',
+                            borderColor: checkInMode === 'client' ? 'var(--primary)' : 'var(--border-card)',
+                            color: checkInMode === 'client' ? '#fff' : 'var(--text-secondary)'
+                          }}
+                          onClick={() => {
+                            setCheckInMode('client');
+                            const clientList = mockDb.clients || [];
+                            if (clientList.length > 0) {
+                              setSelectedClientId(clientList[0].id.toString());
+                            }
+                          }}
+                        >
+                          Client Site Audit
+                        </button>
+                      </div>
+                    </div>
+
+                    {checkInMode === 'client' && (
+                      <div className="form-group animate-fade-in">
+                        <label className="form-label" htmlFor="select_client">Select Audit Client Location</label>
+                        <select
+                          id="select_client"
+                          className="form-control"
+                          value={selectedClientId}
+                          onChange={(e) => setSelectedClientId(e.target.value)}
+                          style={{ 
+                            width: '100%', 
+                            padding: '0.5rem', 
+                            borderRadius: 'var(--radius-sm)', 
+                            backgroundColor: 'var(--bg-card)', 
+                            border: '1px solid var(--border-card)', 
+                            color: '#fff' 
+                          }}
+                        >
+                          <option value="">-- Choose Client --</option>
+                          {(mockDb.clients || []).map(c => (
+                            <option key={c.id} value={c.id}>
+                              {c.name} ({c.engagement_type || 'Audit Client'})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
                     {settings?.require_selfie && (
                       <div className="form-group">
                         <label className="form-label">Take verification selfie:</label>
@@ -537,13 +639,13 @@ export const EmployeeDashboard = () => {
                         className="btn btn-primary" 
                         style={{ flex: 1 }}
                         onClick={handleCheckIn}
-                        disabled={settings?.require_geo && coords.distance > (settings?.allowed_radius || 100)}
+                        disabled={checkInMode === 'office' && settings?.require_geo && coords.distance > (settings?.allowed_radius || 100)}
                       >
                         Confirm Check-In
                       </button>
                       <button 
                         className="btn btn-outline" 
-                        onClick={() => { setShowCheckInForm(false); setSelfie(''); }}
+                        onClick={() => { setShowCheckInForm(false); setSelfie(''); setCheckInMode('office'); setSelectedClientId(''); }}
                       >
                         Cancel
                       </button>
@@ -1013,8 +1115,12 @@ export const EmployeeDashboard = () => {
                     
                     <div id="printable-payslip" className="modal-body" style={{ color: '#000', backgroundColor: '#fff', padding: '2rem', borderRadius: '4px' }}>
                       <div style={{ borderBottom: '2px solid #333', paddingBottom: '1rem', marginBottom: '1rem', textAlign: 'center' }}>
-                        <h2 style={{ color: '#1e3a8a', fontSize: '1.5rem', fontWeight: 'bold', margin: '0' }}>SHARMAN & IYER ASSOCIATES</h2>
-                        <p style={{ fontSize: '0.8rem', color: '#555', margin: '0.25rem 0' }}>Chartered Accountants, Mumbai Central, Mumbai - 400008</p>
+                        <h2 style={{ color: '#1e3a8a', fontSize: '1.5rem', fontWeight: 'bold', margin: '0' }}>
+                          {settings?.firm_name?.toUpperCase() || 'SHARMAN & IYER ASSOCIATES'}
+                        </h2>
+                        <p style={{ fontSize: '0.8rem', color: '#555', margin: '0.25rem 0' }}>
+                          {settings?.firm_address || 'Chartered Accountants, Mumbai Central, Mumbai - 400008'}
+                        </p>
                         <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', color: '#333', letterSpacing: '0.1em', marginTop: '0.5rem', margin: '0' }}>
                           Salary Slip for {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][selectedPayslip.run.month - 1]} {selectedPayslip.run.year}
                         </h4>

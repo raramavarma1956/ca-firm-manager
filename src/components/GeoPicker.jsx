@@ -44,7 +44,7 @@ export const GeoPicker = ({ officeLat, officeLng, allowedRadius, onLocationChang
         // Fallback to simulated office
         simulateLocation('office');
       },
-      { enableHighAccuracy: true, timeout: 5000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
 

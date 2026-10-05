@@ -31,6 +31,7 @@ export const HRDashboard = () => {
   } = useApp();
 
   const [activeTab, setActiveTab] = useState('attendance');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Attendance states
   const [attendanceDate, setAttendanceDate] = useState(getISTDateString());
@@ -474,18 +475,33 @@ export const HRDashboard = () => {
 
   return (
     <div className="app-container">
+      {/* Mobile Backdrop */}
+      {mobileMenuOpen && (
+        <div className="sidebar-backdrop" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
       {/* Sidebar navigation */}
-      <div className="app-sidebar">
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-card)' }}>
-          <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>HR & Accounts</h3>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-            Logged in: <strong style={{ color: 'var(--primary)' }}>{sessionUser?.name}</strong>
-          </p>
+      <div className={`app-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>HR & Accounts</h3>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
+              Logged in: <strong style={{ color: 'var(--primary)' }}>{sessionUser?.name}</strong>
+            </p>
+          </div>
+          <button 
+            type="button" 
+            className="mobile-close-btn" 
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem', gap: '0.5rem', flex: 1 }}>
           <button 
             className={`btn ${activeTab === 'attendance' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('attendance')}
+            onClick={() => { setActiveTab('attendance'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📋 Daily Attendance
@@ -493,7 +509,7 @@ export const HRDashboard = () => {
           
           <button 
             className={`btn ${activeTab === 'onboarding' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('onboarding')}
+            onClick={() => { setActiveTab('onboarding'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             👥 Onboarding Approvals
@@ -506,7 +522,7 @@ export const HRDashboard = () => {
 
           <button 
             className={`btn ${activeTab === 'leaves' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('leaves')}
+            onClick={() => { setActiveTab('leaves'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🌴 Leaves Approval
@@ -518,21 +534,21 @@ export const HRDashboard = () => {
           </button>
           <button 
             className={`btn ${activeTab === 'employees' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('employees')}
+            onClick={() => { setActiveTab('employees'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             👥 Staff Directory
           </button>
           <button 
             className={`btn ${activeTab === 'settings' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('settings')}
+            onClick={() => { setActiveTab('settings'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             ⚙️ Firm Settings
           </button>
           <button 
             className={`btn ${activeTab === 'archival' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('archival')}
+            onClick={() => { setActiveTab('archival'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             ☁️ Cloud Backup
@@ -540,7 +556,7 @@ export const HRDashboard = () => {
           
           <button 
             className={`btn ${activeTab === 'timesheet_report' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('timesheet_report')}
+            onClick={() => { setActiveTab('timesheet_report'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📊 Timesheet Reports
@@ -548,7 +564,7 @@ export const HRDashboard = () => {
 
           <button 
             className={`btn ${activeTab === 'analytics' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('analytics')}
+            onClick={() => { setActiveTab('analytics'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📈 HR Analytics
@@ -556,7 +572,7 @@ export const HRDashboard = () => {
 
           <button 
             className={`btn ${activeTab === 'audit' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('audit')}
+            onClick={() => { setActiveTab('audit'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🛡️ Secure Audit Log
@@ -572,8 +588,18 @@ export const HRDashboard = () => {
       {/* Main Content */}
       <div className="app-main">
         <header className="app-header">
-          <h2 style={{ fontSize: '1.25rem' }}>CA Practice Suite</h2>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <button 
+              type="button" 
+              className="mobile-menu-btn" 
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              ☰ Menu
+            </button>
+            <h2 style={{ fontSize: '1.15rem' }}>CA Practice Suite</h2>
+          </div>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
             Designation: <strong style={{ color: 'var(--primary)' }}>HR Manager</strong>
           </span>
         </header>
@@ -652,19 +678,28 @@ export const HRDashboard = () => {
                               {rec.check_out ? new Date(rec.check_out).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '-'}
                             </td>
                             <td>{rec.worked_hours ? `${rec.worked_hours} hrs` : '-'}</td>
-                            <td>
-                              {rec.latitude ? (
-                                <span style={{ 
-                                  color: rec.distance_from_office > settingsForm.allowed_radius ? 'var(--danger)' : '#34d399',
-                                  fontSize: '0.8rem',
-                                  fontWeight: '600'
-                                }}>
-                                  {Math.round(rec.distance_from_office)}m deviation
-                                </span>
-                              ) : (
-                                <span style={{ color: 'var(--text-muted)' }}>No GPS logged</span>
-                              )}
-                            </td>
+                             <td>
+                               {rec.check_in_mode === 'client' ? (
+                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+                                   <span className="badge" style={{ backgroundColor: 'var(--secondary)', color: '#fff', fontSize: '0.7rem', padding: '0.15rem 0.35rem', alignSelf: 'flex-start', borderRadius: '4px' }}>
+                                     On-Site Audit
+                                   </span>
+                                   <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                                     {mockDb.clients?.find(c => c.id === parseInt(rec.client_id))?.name || 'Client Site'}
+                                   </span>
+                                 </div>
+                               ) : rec.latitude ? (
+                                 <span style={{ 
+                                   color: rec.distance_from_office > settingsForm.allowed_radius ? 'var(--danger)' : '#34d399',
+                                   fontSize: '0.8rem',
+                                   fontWeight: '600'
+                                 }}>
+                                   {Math.round(rec.distance_from_office)}m deviation
+                                 </span>
+                               ) : (
+                                 <span style={{ color: 'var(--text-muted)' }}>No GPS logged</span>
+                               )}
+                             </td>
                             <td>
                               {rec.selfie_url ? (
                                 <button className="btn btn-outline" style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }} onClick={() => setSelectedSelfie(rec.selfie_url)}>

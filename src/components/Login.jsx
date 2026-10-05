@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 
 export const Login = () => {
-  const { login, signup, mockDb, addNotification } = useApp();
+  const { login, signup, mockDb, addNotification, getSettings } = useApp();
   const [mode, setMode] = useState('login'); // 'login' or 'signup'
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    if (getSettings) {
+      getSettings().then(s => {
+        if (active) setSettings(s);
+      }).catch(err => console.error('Failed to load settings in Login:', err));
+    }
+    return () => { active = false; };
+  }, [getSettings]);
   
   // Login fields
   const [email, setEmail] = useState('');
@@ -101,7 +112,7 @@ export const Login = () => {
             CA
           </div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-            CA Practice Manager
+            {settings?.firm_name || 'CA Practice Manager'}
           </h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             {mode === 'login' ? 'Staff Attendance & Practice Suite' : 'Employee Self-Onboarding'}

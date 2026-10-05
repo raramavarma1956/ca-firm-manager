@@ -117,15 +117,6 @@ body {
   margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-  }
-  .app-content {
-    padding: 1rem;
-  }
-}
-
 /* Header & Sidebar */
 .app-header {
   height: var(--header-height);
@@ -136,6 +127,7 @@ body {
   border-bottom: 1px solid var(--border-card);
   background: rgba(9, 13, 22, 0.8);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 10;
   position: sticky;
   top: 0;
@@ -151,6 +143,103 @@ body {
   position: sticky;
   top: 0;
   z-index: 20;
+}
+
+/* Mobile Drawer Controls */
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  gap: 0.4rem;
+}
+
+.mobile-close-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .app-container {
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .mobile-close-btn {
+    display: inline-flex;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.7);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
+  }
+
+  .app-header {
+    height: 60px;
+    padding: 0 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .app-content {
+    padding: 1rem 0.75rem calc(1.5rem + env(safe-area-inset-bottom));
+  }
+
+  /* Prevent iOS Safari from automatically zooming into inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Buttons */

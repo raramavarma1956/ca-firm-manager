@@ -21,6 +21,7 @@ export const PartnerDashboard = () => {
   } = useApp();
 
   const [activeTab, setActiveTab] = useState('overview');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [assignmentTypes, setAssignmentTypes] = useState(['Statutory Audit', 'GST Monthly Return', 'Tax Advisory']);
   const [newTypeInput, setNewTypeInput] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('');
@@ -397,46 +398,61 @@ export const PartnerDashboard = () => {
 
   return (
     <div className="app-container">
+      {/* Mobile Backdrop */}
+      {mobileMenuOpen && (
+        <div className="sidebar-backdrop" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
       {/* Sidebar nav */}
-      <div className="app-sidebar">
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-card)' }}>
-          <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>Partner Dashboard</h3>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-            Logged in: <strong style={{ color: 'var(--primary)' }}>Rajesh Iyer</strong>
-          </p>
+      <div className={`app-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>Partner Dashboard</h3>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
+              Logged in: <strong style={{ color: 'var(--primary)' }}>Rajesh Iyer</strong>
+            </p>
+          </div>
+          <button 
+            type="button" 
+            className="mobile-close-btn" 
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem', gap: '0.5rem', flex: 1 }}>
           <button 
             className={`btn ${activeTab === 'overview' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('overview')}
+            onClick={() => { setActiveTab('overview'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             📊 Firm Analytics
           </button>
           <button 
             className={`btn ${activeTab === 'profitability' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('profitability')}
+            onClick={() => { setActiveTab('profitability'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             💰 Assignment Realization
           </button>
           <button 
             className={`btn ${activeTab === 'payroll' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('payroll')}
+            onClick={() => { setActiveTab('payroll'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             💵 Lock / Finalize Payroll
           </button>
           <button 
             className={`btn ${activeTab === 'audit' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('audit')}
+            onClick={() => { setActiveTab('audit'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🛡️ Audit Trail Log
           </button>
           <button 
             className={`btn ${activeTab === 'clients' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setActiveTab('clients')}
+            onClick={() => { setActiveTab('clients'); setMobileMenuOpen(false); }}
             style={{ justifyContent: 'flex-start' }}
           >
             🏢 Clients & Templates
@@ -451,18 +467,28 @@ export const PartnerDashboard = () => {
 
       {/* Main Main */}
       <div className="app-main">
-        <header className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h2 style={{ fontSize: '1.25rem' }}>CA Practice Suite</h2>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              System Integrity Role: <strong style={{ color: 'var(--primary)' }}>Managing Partner</strong>
-            </span>
+        <header className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <button 
+              type="button" 
+              className="mobile-menu-btn" 
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              ☰ Menu
+            </button>
+            <div>
+              <h2 style={{ fontSize: '1.15rem' }}>CA Practice Suite</h2>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Role: <strong style={{ color: 'var(--primary)' }}>Managing Partner</strong>
+              </span>
+            </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>Branch View:</label>
+            <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>Branch:</label>
             <select 
               className="form-control form-select"
-              style={{ padding: '0.35rem 0.75rem', fontSize: '0.85rem', width: '200px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-card)', color: '#fff' }}
+              style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', width: '160px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-card)', color: '#fff' }}
               value={selectedBranch}
               onChange={(e) => setSelectedBranch(e.target.value)}
             >

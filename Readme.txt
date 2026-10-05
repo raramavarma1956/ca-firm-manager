@@ -16,6 +16,15 @@ address fields, and separate role delegation (Partner in Charge and HR
 Administrator) per branch location.
 
 
+One-Click Cloud Deployment:
+--------------------------
+Deploy this application directly to the cloud using the links below:
+- Deploy to Vercel: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-github-username%2Fca-firm-manager
+- Deploy to Netlify: https://app.netlify.com/start/deploy?repository=https://github.com/your-github-username/ca-firm-manager
+
+*Note: Replace 'your-github-username' with your actual GitHub username once you push your repository.*
+
+
 Project Structure:
 ------------------
 - /src/components/        - User interface dashboards & registers.
@@ -120,8 +129,9 @@ Offsite Client Audit / Client Premises Check-In:
 ------------------------------------------------
 When employees are deputed offsite for client audits:
 1. Offline Mode: The PWA loads offline via Service Worker, and all attendance logs are written locally on the device (using localStorage).
-2. Geofencing Override: If "Restrict check-in to office location" is enabled in settings, offsite check-ins will trigger an "Out of Bounds" block.
-3. Solutions for Offsite Staff:
-   - Option A: HR toggles off "Restrict check-in to office location" in settings; coordinates are still tracked but not restricted.
-   - Option B: Staff records hours on timesheets, and HR approves regularization manually.
+2. Client Site Check-In Mode: In the check-in modal, employees can choose "Client Site Audit" mode. This bypasses the office geofencing restriction and prompts them to select the audit client they are visiting.
+3. HR Approval Workflow: Client-site check-ins are recorded as "Pending Approval" with a distinct "On-Site Audit" badge and the client's name displayed in the HR Dashboard. HR/Partners can review the GPS logs and approve the attendance manually.
+4. External Connectivity:
+   - Option A (Tailscale VPN): Install Tailscale on the office host machine and on employee mobile devices. Staff can securely connect to the office PC's Tailscale private IP (e.g., http://100.12.34.56:5173) while off-site.
+   - Option B (Cloud Deployment): Connect the app to a remote Supabase instance (using the .env configuration template) and deploy the Vite frontend publicly to Vercel/Netlify for internet-wide access.
 ======================================================================
