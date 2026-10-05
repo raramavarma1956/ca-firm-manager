@@ -1116,10 +1116,10 @@ export const EmployeeDashboard = () => {
                     <div id="printable-payslip" className="modal-body" style={{ color: '#000', backgroundColor: '#fff', padding: '2rem', borderRadius: '4px' }}>
                       <div style={{ borderBottom: '2px solid #333', paddingBottom: '1rem', marginBottom: '1rem', textAlign: 'center' }}>
                         <h2 style={{ color: '#1e3a8a', fontSize: '1.5rem', fontWeight: 'bold', margin: '0' }}>
-                          {settings?.firm_name?.toUpperCase() || 'SHARMAN & IYER ASSOCIATES'}
+                          {settings?.firm_name?.toUpperCase() || 'VARMA RAJA & ASSOCIATES'}
                         </h2>
                         <p style={{ fontSize: '0.8rem', color: '#555', margin: '0.25rem 0' }}>
-                          {settings?.firm_address || 'Chartered Accountants, Mumbai Central, Mumbai - 400008'}
+                          {settings?.firm_address || 'Chartered Accountants, Indiranagar, Bangalore, Karnataka - 560038'}
                         </p>
                         <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', color: '#333', letterSpacing: '0.1em', marginTop: '0.5rem', margin: '0' }}>
                           Salary Slip for {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][selectedPayslip.run.month - 1]} {selectedPayslip.run.year}

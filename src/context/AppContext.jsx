@@ -58,10 +58,10 @@ const SEED_ASSIGNMENTS = [
 
 const SEED_SETTINGS = {
   id: 1,
-  firm_name: import.meta.env?.VITE_FIRM_NAME || 'Apex Chartered Accountants',
-  firm_address: import.meta.env?.VITE_FIRM_ADDRESS || '123, Financial District, Mumbai, Maharashtra - 400001',
-  office_lat: 19.0760,
-  office_lng: 72.8777,
+  firm_name: import.meta.env?.VITE_FIRM_NAME || 'Varma Raja & Associates',
+  firm_address: import.meta.env?.VITE_FIRM_ADDRESS || 'Indiranagar, Bangalore, Karnataka - 560038',
+  office_lat: 12.9784,
+  office_lng: 77.6408,
   allowed_radius: 100, // meters
   require_selfie: false,
   require_geo: false,
@@ -74,22 +74,22 @@ const SEED_SETTINGS = {
   attendance_late_cutoff: '10:00',
   public_holidays: JSON.stringify([
     { date: '2026-04-14', description: 'Ambedkar Jayanti', year: 2026 },
-    { date: '2026-05-01', description: 'Maharashtra Day / May Day', year: 2026 },
+    { date: '2026-05-01', description: 'May Day', year: 2026 },
     { date: '2026-06-18', description: 'Bakrid / Eid al-Adha', year: 2026 }
   ]),
   assignment_types: JSON.stringify(['Statutory Audit', 'GST Monthly Return', 'Tax Advisory']),
   branches: JSON.stringify([
     {
       id: 'branch-1',
-      name: 'Mumbai Head Office',
-      address: '123, Financial District, Mumbai, Maharashtra - 400001',
+      name: 'Bangalore Head Office (Indiranagar)',
+      address: '100 Feet Road, Indiranagar, Bangalore, Karnataka - 560038',
       partner_in_charge_id: 'partner-001',
       hr_administrator_id: 'hr-001'
     },
     {
       id: 'branch-2',
-      name: 'Pune Branch',
-      address: '456, IT Park Road, Hinjewadi, Pune, Maharashtra - 411057',
+      name: 'Bangalore Branch (Koramangala)',
+      address: '80 Feet Road, 4th Block, Koramangala, Bangalore, Karnataka - 560034',
       partner_in_charge_id: 'partner-001',
       hr_administrator_id: 'partner-001'
     }
@@ -164,8 +164,8 @@ const buildSeedAttendance = () => {
         worked_hours: isLate ? 8.1 : 9.0,
         status: 'Present',
         selfie_url: '',
-        latitude: 19.0761,
-        longitude: 72.8778,
+        latitude: 12.9784,
+        longitude: 77.6408,
         distance_from_office: 15,
         approved_by_admin: true
       });
@@ -237,7 +237,16 @@ export const AppProvider = ({ children }) => {
       const clients = getOrInitTable('ca_clients', SEED_CLIENTS);
       const templates = getOrInitTable('ca_templates', SEED_TEMPLATES);
       const assignments = getOrInitTable('ca_assignments', SEED_ASSIGNMENTS);
-      const settings = getOrInitTable('ca_settings', SEED_SETTINGS);
+      let settings = getOrInitTable('ca_settings', SEED_SETTINGS);
+      // Ensure firm branding is updated to Varma Raja & Associates
+      if (!settings.firm_name || settings.firm_name === 'Apex Chartered Accountants') {
+        settings = {
+          ...settings,
+          firm_name: 'Varma Raja & Associates',
+          firm_address: 'Indiranagar, Bangalore, Karnataka - 560038'
+        };
+        localStorage.setItem('ca_settings', JSON.stringify(settings));
+      }
       const attendance = getOrInitTable('ca_attendance', buildSeedAttendance());
       const timesheets = getOrInitTable('ca_timesheets', buildSeedTimesheets());
       const leaveRequests = getOrInitTable('ca_leave_requests', [

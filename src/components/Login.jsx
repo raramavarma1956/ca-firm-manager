@@ -112,7 +112,7 @@ export const Login = () => {
             CA
           </div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-            {settings?.firm_name || 'CA Practice Manager'}
+            {settings?.firm_name || 'Varma Raja & Associates'}
           </h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             {mode === 'login' ? 'Staff Attendance & Practice Suite' : 'Employee Self-Onboarding'}
@@ -229,8 +229,8 @@ export const Login = () => {
                     } catch (e) {}
                     return (
                       <>
-                        <option value="branch-1">Mumbai Head Office</option>
-                        <option value="branch-2">Pune Branch</option>
+                        <option value="branch-1">Bangalore Head Office (Indiranagar)</option>
+                        <option value="branch-2">Bangalore Branch (Koramangala)</option>
                       </>
                     );
                   })()}

@@ -1,11 +1,10 @@
-# CA Firm Staff & Practice Manager
+# Varma Raja & Associates, Bangalore
+### CA Firm Staff & Practice Manager
 
-A progressive, high-fidelity web application built for CA firms to manage staff attendance (with selfie/GPS checks), leave requests, weekly timesheets, Indian statutory payroll, client billings, realization ratios, and secure partner audit trails.
+A progressive, high-fidelity web application built for **Varma Raja & Associates, Bangalore** to manage staff attendance (with selfie/GPS checks), leave requests, weekly timesheets, Indian statutory payroll, client billings, realization ratios, and secure partner audit trails.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-github-username%2Fca-firm-manager)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/your-github-username/ca-firm-manager)
-
-> *Note: Make sure to replace `your-github-username` in the links above with your actual GitHub username once you push your repository.*
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fraramavarma1956%2Fca-firm-manager)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/raramavarma1956/ca-firm-manager)
 
 ---
 

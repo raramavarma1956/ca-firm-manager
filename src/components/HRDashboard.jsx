@@ -959,7 +959,7 @@ export const HRDashboard = () => {
                           <span className="badge badge-info" style={{ display: 'block', marginBottom: '0.25rem' }}>
                             {(() => {
                               const b = branchesList.find(x => x.id === emp.branch_id);
-                              return b ? b.name : 'Mumbai Head Office';
+                              return b ? b.name : 'Bangalore Head Office';
                             })()}
                           </span>
                           <span className="badge badge-outline" style={{ display: 'block', border: '1px solid var(--primary)', color: 'var(--primary)', textTransform: 'none' }}>
