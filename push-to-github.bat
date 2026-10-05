@@ -10,7 +10,11 @@ echo Target Repository:
 echo https://github.com/raramavarma1956/ca-firm-manager.git
 echo.
 
-echo Attempting direct push using Git Credential Manager...
+echo 1. Checking for unsaved changes...
+git add -A
+git commit -m "Update CA Practice Manager codebase" >nul 2>&1
+
+echo 2. Pushing to GitHub (origin main)...
 git push -u origin main
 
 if %errorlevel% equ 0 (
